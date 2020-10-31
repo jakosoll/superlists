@@ -44,14 +44,20 @@ class NewUserTest(unittest.TestCase):
 
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(
-            any(row.text == '1. Купить павлиньи перья' for row in rows),
-            'Новый элемент списка не появился в таблице'
-        )
+        self.assertIn('1: Купить павлиньи перья', [row.text for row in rows])
         # Тестовое поле по прежнему приглашает ее добавить еще один элемент
+        input_box = self.browser.find_element_by_id('id_new_item')
         # Она вводит "Сделать мушку из павлиньих перьев"
-        self.fail('Закончить тест!')
+        input_box.send_keys('Сделать мушку из павлиньих перьев')
+
+        input_box.send_keys(Keys.ENTER)
+        time.sleep(1)
         # Страница снова обновляется и теперь показывает оба элемента списка
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn('1: Купить павлиньи перья', [row.text for row in rows])
+        self.assertIn('2: Сделать мушку из павлиньих перьев', [row.text for row in rows])
+        self.fail('Закончить тест!')
 
         # Эдит интересно, запомнит ли сайт ее списко. Далее она видит,
         # что сайт сгенерировал для нее уникальный URL-адрес.
