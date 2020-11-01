@@ -2,3 +2,7 @@
 db.sqlite3
 lists/__pycache__/
 lists/migrations/__pycache__/
+*.pyc
+functional_tests/__pycache__/
+functional_tests/__pycache__/**
+/functional_tests/__pycache__/**
