@@ -4,7 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import WebDriverException
 
-WAIT_TIME = 10
+WAIT_TIME = 5
 
 
 class NewUserTest(LiveServerTestCase):
