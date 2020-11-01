@@ -22,19 +22,25 @@ class ListViewTest(TestCase):
 
     def test_uses_list_template(self):
         """Тест: используется шаблон списка"""
-        response = self.client.get('/lists/one-in-whole-world-list/')
+        list_ = List.objects.create()
+        response = self.client.get(f'/lists/{list_.id}/')
         self.assertTemplateUsed(response, 'list.html')
 
     def test_displays_all_list_items(self):
-        """Тест: отображаются все элементы списка"""
-        list_ = List.objects.create()
-        Item.objects.create(text='itemey 1', list=list_)
-        Item.objects.create(text='itemey 2', list=list_)
+        """Тест: отображаются элементы только этого списка"""
+        correct_list = List.objects.create()
+        Item.objects.create(text='itemey 1', list=correct_list)
+        Item.objects.create(text='itemey 2', list=correct_list)
+        other_list = List.objects.create()
+        Item.objects.create(text='other element 1', list=other_list)
+        Item.objects.create(text='other element 2', list=other_list)
 
-        response = self.client.get('/lists/one-in-whole-world-list/')
+        response = self.client.get(f'/lists/{correct_list.id}/')
 
         self.assertContains(response, 'itemey 1')
         self.assertContains(response, 'itemey 2')
+        self.assertNotContains(response, 'other element 1')
+        self.assertNotContains(response, 'other element 2')
 
 
 class NewListTest(TestCase):
@@ -52,7 +58,8 @@ class NewListTest(TestCase):
     def test_redirect_after_post(self):
         """Тест: переадресует после POST-Запроса"""
         response = self.client.post('/lists/new', data={'item_text': 'A new list item'})
-        self.assertRedirects(response, '/lists/one-in-whole-world-list/')
+        new_list = List.objects.first()
+        self.assertRedirects(response, f'/lists/{new_list.id}/')
 
 
 class ListAndItemModelsTest(TestCase):

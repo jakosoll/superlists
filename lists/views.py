@@ -9,9 +9,10 @@ def home_page(request):
     return render(request, 'home.html')
 
 
-def view_list(request):
+def view_list(request, pk):
     """представление списка"""
-    items = Item.objects.all()
+    list_ = List.objects.get(id=pk)
+    items = Item.objects.filter(list=list_)
     return render(request, 'list.html', {'items': items})
 
 
@@ -19,4 +20,4 @@ def new_list(request):
     """новый список"""
     list_ = List.objects.create()
     Item.objects.create(text=request.POST['item_text'], list=list_)
-    return redirect('/lists/one-in-whole-world-list/')
+    return redirect(f'/lists/{list_.id}/')
