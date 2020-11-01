@@ -98,7 +98,7 @@ class NewUserTest(LiveServerTestCase):
         self.browser.quit()
         self.browser = webdriver.Chrome()
 
-        # Френсис посещает домашнюю страницу. Нет никаких призднаков Эдит
+        # Френсис посещает домашнюю страницу. Нет никаких признаков Эдит
         self.browser.get(self.live_server_url)
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('Купить павлиньи перья', page_text)
