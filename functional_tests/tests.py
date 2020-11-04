@@ -1,5 +1,6 @@
 import time
 from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import WebDriverException
@@ -7,7 +8,7 @@ from selenium.common.exceptions import WebDriverException
 WAIT_TIME = 5
 
 
-class NewUserTest(LiveServerTestCase):
+class NewUserTest(StaticLiveServerTestCase):
     """
     Тестируем нового пользователя
     """
