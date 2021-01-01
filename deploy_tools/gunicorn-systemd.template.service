@@ -1,0 +1,11 @@
+[Unit]
+Description=Gunicorn server for plantpay-staging.tk
+
+[Service]
+Restart=on-failure
+User=soll
+WorkingDirectory=/home/soll/sites/plantpay-staging.tk/source
+ExecStart=/home/soll/sites/plantpay-staging.tk/virtualenv/bin/gunicorn --bind unix:/tmp/plantpay-staging.tk.socket superlists.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
