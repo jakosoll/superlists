@@ -1,40 +1,11 @@
 import time
-import os
-from django.test import LiveServerTestCase
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import WebDriverException
-
-WAIT_TIME = 5
+from .base import FunctionalTest
 
 
-class NewUserTest(StaticLiveServerTestCase):
-    """
-    Тестируем нового пользователя
-    """
-    def setUp(self) -> None:
-        self.browser = webdriver.Chrome()
-        staging_server = os.environ.get('STAGING_SERVER')
-        if staging_server:
-            self.live_server_url = 'http://' + staging_server
-
-    def tearDown(self) -> None:
-        self.browser.quit()
-
-    def wait_for_row_in_list_table(self, row_text):
-        """Ожидать строки в таблице списка"""
-        start_time = time.time()
-        while True:
-            try:
-                table = self.browser.find_element_by_id('id_list_table')
-                rows = table.find_elements_by_tag_name('tr')
-                self.assertIn(row_text, [row.text for row in rows])
-                return
-            except (WebDriverException, AssertionError) as e:
-                if time.time() - start_time > WAIT_TIME:
-                    raise e
-                time.sleep(0.5)
+class NewVisitorTest(FunctionalTest):
+    """тест нового посетитееля"""
 
     def test_can_start_a_list_for_one_user(self):
         """Можно начать список и получить его позже"""
@@ -126,27 +97,3 @@ class NewUserTest(StaticLiveServerTestCase):
         self.assertIn('Купить молоко', page_text)
 
         # Удовлетворенные они оба ложатся спать
-
-    def test_layout_and_styling(self):
-        """тест макета и стилевого оформления"""
-        # Эдит открывает домашнюю страницу
-        self.browser.get(self.live_server_url)
-        self.browser.set_window_size(1024, 768)
-
-        # Она замечает, что поле ввода аккуратно отцентрировано
-        input_box = self.browser.find_element_by_id('id_new_item')
-        self.assertAlmostEqual(
-            input_box.location['x'] + input_box.size['width'] / 2,
-            512,
-            delta=10
-        )
-        # Она начинает новый список и видит, что поле там тоже аккуратно отценровано
-        input_box.send_keys('test')
-        input_box.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table('1: test')
-        input_box = self.browser.find_element_by_id('id_new_item')
-        self.assertAlmostEqual(
-            input_box.location['x'] + input_box.size['width'] / 2,
-            512,
-            delta=10
-        )
