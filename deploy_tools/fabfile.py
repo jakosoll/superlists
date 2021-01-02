@@ -24,7 +24,7 @@ def _get_latest_source(source_folder):
 
 def _update_settings(source_folder, host):
     """Обновить настройки django"""
-    setting_path = source_folder + '/superlists/setting.py'
+    setting_path = source_folder + '/superlists/settings.py'
     sed(setting_path, "DEBUG = True", "DEBUG = False")
     sed(setting_path,
         'ALLOWED_HOSTS =.+$',
