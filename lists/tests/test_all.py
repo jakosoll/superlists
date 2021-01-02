@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import resolve
 from lists.views import home_page
-from .models import Item, List
+from lists.models import Item, List
 
 
 class TestHomePage(TestCase):
