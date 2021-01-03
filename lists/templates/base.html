@@ -15,8 +15,7 @@
         <div class="col-md-6 col-md-offset-3 mx-auto ">
                 <h1 class="display-2 text-center">{% block header_text %}{% endblock %}</h1>
                 <form action="{% block form_action %}{% endblock %}" method="POST" class="mt-4">
-                    <input id="id_new_item" name="item_text"
-                           type="text" placeholder="Enter a to-do item" class="form-control input-lg">
+                    {{ form.text }}
                     {% csrf_token %}
                     {% if error %}
                         <div class="form-group has-error">

@@ -1,13 +1,14 @@
 from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
 from .models import Item, List
+from lists.forms import ItemForm
 
 # Create your views here.
 
 
 def home_page(request):
     """home page"""
-    return render(request, 'home.html')
+    return render(request, 'home.html', {'form': ItemForm()})
 
 
 def view_list(request, pk):
