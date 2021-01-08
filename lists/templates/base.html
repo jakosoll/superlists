@@ -20,6 +20,19 @@
         </form>
     </div>
 </nav>
+{% if messages %}
+    <div class="row">
+        <div class="col-md-8">
+            {% for message in messages %}
+                {% if message.level_lag == 'success' %}
+                    <div class="alert-success">{{ message }}</div>
+                {% else %}
+                    <div class="alert-warning">{{ message }}</div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
 <div class="jumbotron">
     <div class="row">
         <div class="col-md-6 col-md-offset-3 mx-auto ">
