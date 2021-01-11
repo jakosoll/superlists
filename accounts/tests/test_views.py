@@ -1,5 +1,5 @@
 from django.test import TestCase
-from unittest.mock import patch
+from unittest.mock import patch, call
 from accounts.models import Token
 
 
@@ -54,10 +54,50 @@ class SendLoginEmailViewTest(TestCase):
         self.assertIn(expected_url, body)
 
 
+@patch('accounts.views.auth')
 class LoginViewTest(TestCase):
     """тест представления входа в систему"""
 
-    def test_redirects_to_home_page(self):
+    def test_redirects_to_home_page(self, mock_auth):
         """тест: представление переадресовывает на домашнюю страницу"""
-        response = self.client.get('/accounts/login?token=abc123')
+        response = self.client.get('/accounts/login?token=abcd123')
         self.assertRedirects(response, '/')
+
+    def test_calls_authenticate_with_uid_from_get_request(self, mock_auth):
+        """тест: вызывается authenticate с uid из GET-запроса"""
+        response = self.client.get('/accounts/login?token=abcd123')
+        self.assertEqual(
+            mock_auth.authenticate.call_args,
+            call(response.wsgi_request, uid='abcd123')
+        )
+
+    def test_calls_auth_login_with_user_if_there_is_one(self, mock_auth):
+        """тест: вызывается authenticate с пользователем, если такой имеется"""
+        response = self.client.get('/accounts/login?token=abcd123')
+        self.assertEqual(
+            mock_auth.login.call_args,
+            call(response.wsgi_request, mock_auth.authenticate.return_value)
+        )
+
+    def test_does_not_login_if_user_is_not_authenticated(self, mock_auth):
+        """тест: не регистируется в системе если пользователь не аутентифицирован"""
+        mock_auth.authenticate.return_value = None  # устанавлием None в явном виде, т.к. mock не вернет None
+        self.client.get('/accounts/login?token=abcd123')
+        self.assertEqual(mock_auth.login.called, False)
+
+
+@patch('accounts.views.auth')
+class LogoutTest(TestCase):
+    """Тестирование выхода"""
+    def test_redirects_to_home_page_after_logout(self, mock_auth):
+        """Редирект на домашнюю страницу после выхода"""
+        response = self.client.get('/accounts/logout')
+        self.assertRedirects(response, '/')
+
+    def test_calls_logout_(self, mock_auth):
+        """Тест: фукнция вызывается"""
+        response = self.client.get('/accounts/logout')
+        self.assertEqual(
+            mock_auth.logout.called, True
+        )
+

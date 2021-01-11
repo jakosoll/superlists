@@ -2,6 +2,7 @@ from django.core import mail
 from selenium.webdriver.common.keys import Keys
 import re
 from .base import FunctionalTest
+import time
 
 TEST_EMAIL = 'edith@example.com'
 SUBJECT = 'Your login link for Superlists'
@@ -44,3 +45,11 @@ class LoginTest(FunctionalTest):
         self.wait_for(lambda: self.browser.find_element_by_link_text('Log out'))
         navbar = self.browser.find_element_by_css_selector('.navbar')
         self.assertIn(TEST_EMAIL, navbar.text)
+
+        # Эдит находит кнопку выйти и убеждается, что она теперь не в системе
+        self.browser.find_element_by_link_text('Log out').click()
+
+        # Она вышла из системы
+        self.wait_for(lambda: self.browser.find_element_by_name('email'))
+        navbar = self.browser.find_element_by_css_selector('.navbar')
+        self.assertNotIn(TEST_EMAIL, navbar.text)

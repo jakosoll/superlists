@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.core.mail import send_mail
-from django.contrib import messages
+from django.contrib import messages, auth
 from django.urls import reverse
 
 from accounts.models import Token
@@ -32,4 +32,13 @@ def send_login_email(request):
 
 def login(request):
     """Представление входа"""
+    user = auth.authenticate(request, uid=request.GET.get('token'))
+    if user:
+        auth.login(request, user)
+    return redirect('/')
+
+
+def logout(request):
+    """Представление выхода"""
+    auth.logout(request)
     return redirect('/')
