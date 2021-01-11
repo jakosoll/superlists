@@ -42,14 +42,10 @@ class LoginTest(FunctionalTest):
         self.browser.get(url)
 
         # Она зарегистрирована в системе!
-        self.wait_for(lambda: self.browser.find_element_by_link_text('Log out'))
-        navbar = self.browser.find_element_by_css_selector('.navbar')
-        self.assertIn(TEST_EMAIL, navbar.text)
+        self.wait_to_be_logged_in(TEST_EMAIL)
 
         # Эдит находит кнопку выйти и убеждается, что она теперь не в системе
         self.browser.find_element_by_link_text('Log out').click()
 
         # Она вышла из системы
-        self.wait_for(lambda: self.browser.find_element_by_name('email'))
-        navbar = self.browser.find_element_by_css_selector('.navbar')
-        self.assertNotIn(TEST_EMAIL, navbar.text)
+        self.wait_to_be_logged_out(TEST_EMAIL)
