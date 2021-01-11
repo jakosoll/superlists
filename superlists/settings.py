@@ -111,22 +111,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-        },
-    },
-    'root': {'level': 'INFO'},
-}
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'jako.soll@gmail.com'

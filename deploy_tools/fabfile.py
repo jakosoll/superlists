@@ -4,6 +4,7 @@ import random
 import string
 
 REPO_URL = 'https://github.com/jakosoll/superlists.git'
+PROJECT_NAME = 'superlists'
 
 
 def _create_directory_structure_if_necessary(site_folder):
@@ -30,7 +31,12 @@ def _update_settings(source_folder, host):
         'ALLOWED_HOSTS =.+$',
         f'ALLOWED_HOSTS = ["{host}"]'
         )
-    secret_key_file = source_folder + '/superlists/secret_key.py'
+    sed(
+        setting_path,
+        "'NAME': BASE_DIR / '../db.sqlite3'",
+        "'NAME': BASE_DIR / '../database/db.sqlite3'",
+        )
+    secret_key_file = source_folder + f'/{PROJECT_NAME}/secret_key.py'
     if not exists(secret_key_file):
         chars = string.ascii_lowercase + string.digits + string.punctuation
         key = ''.join(random.SystemRandom().choice(chars) for _ in range(50))

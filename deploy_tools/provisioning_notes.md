@@ -17,7 +17,7 @@
 * заменить SITENAME на доменное имя
 * `export $SITENAME=name_your_site`
 * `cp nginx.template.conf /etc/nginx/sites-available/$SITENAME`
-* `sudo ln -s ../sites-avaliable/$SITENAME /etc.nginx/sites-enabled/$SITENAME`
+* `sudo ln -s /etc/nginx/sites-avaliable/$SITENAME /etc/nginx/sites-enabled/$SITENAME`
 * `sudo rm /etc/nginx/sites-enabled/default`
 * `sudo systemctl reload nginx`
 
